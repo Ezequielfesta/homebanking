@@ -51,7 +51,7 @@ public class Client {
         }
     }
     public void setEmail(String email) {
-        if (!lastName.isBlank()) {
+        if (!email.isBlank()) {
             this.email = email;
         }
     }
