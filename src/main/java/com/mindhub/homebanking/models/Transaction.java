@@ -9,25 +9,28 @@ import java.util.Set;
 
 @Entity
 public class Transaction {
+    public enum TransactionType {
+        CREDIT,
+        DEBIT
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private TransactionType type;
-    enum TransactionType {
-        CREDIT,
-        DEBIT
-    }
+
     private Double amount;
     private String description;
     private LocalDateTime date;
 
-    //@OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    //private Set<Account> accounts = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     public Transaction(){}
 
     public Transaction(TransactionType type, Double amount, String description, LocalDateTime date) {
+
         this.type = type;
         this.amount = amount;
         this.description = description;
@@ -51,8 +54,9 @@ public class Transaction {
     }
 
 
-    //public Set<Account> getAccounts() {return accounts;}
-
+    public void setAccount(Account account) {
+        this.account = account;
+    }
     public void setAmount(Double amount) {
         this.amount = amount;
         }
@@ -61,18 +65,17 @@ public class Transaction {
             this.description = description;
         }
     }
-    public void setDate(LocalDateTime date) {
-        date = LocalDateTime.now();
+    public void setDate() {
+        date = LocalDateTime.now().minusDays(1);
     }
-
-  //  public void addAccount(Account account){
-  //      account.setClient(this);
-  //      this.accounts.add(account);}
+    public void setTypeCredit(){ type = TransactionType.CREDIT; }
+    public void setTypeDebit(){ type = TransactionType.DEBIT; }
 
     public String toString() {
         return "Transaction{" + '\'' +
                 "id=" + id + '\'' +
-                ",type='" + type + '\'' +
+                ", account='" + account + '\'' +
+                ", type='" + type + '\'' +
                 ", amount='" + amount + '\'' +
                 ", date='" + date + '\'' +
                 ", description='" + description + '\'' +

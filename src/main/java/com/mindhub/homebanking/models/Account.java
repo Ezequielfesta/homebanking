@@ -1,10 +1,11 @@
 package com.mindhub.homebanking.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -20,16 +21,11 @@ public class Account {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @JsonIgnore
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
+    private Set<Transaction> transactions = new HashSet<>();
 
     public Account(){}
+
     public Account(String number, LocalDate creationDate, Double balance) {
         this.number = number;
         this.creationDate = creationDate;
@@ -39,36 +35,44 @@ public class Account {
     public Long getId(){
         return id;
     }
-
+    public Client getClient() {
+        return client;
+    }
     public String getNumber() {
         return number;
     }
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+    public Double getBalance() {
+        return balance;
+    }
+    public Set<Transaction> getTransactions() {return transactions;}
 
+    public void setClient(Client client) {
+        this.client = client;
+    }
     public void setNumber(String number) {
         if (!number.isBlank()) {
             this.number = number;
         }
     }
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
     public LocalDate setCreationDate() {
         creationDate = LocalDate.now();
         return creationDate;
     }
-
     public LocalDate setCreationDateTomorrow() {
         creationDate = LocalDate.now().plusDays(1);
         return creationDate;
     }
-
-    public Double getBalance() {
-        return balance;
-    }
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+    public void addTransaction(Transaction transaction){
+        transaction.setAccount(this);
+        this.transactions.add(transaction);
+    }
+
     public String toString() {
         return "Account{" + '\'' +
                 "id=" + id + '\'' +
