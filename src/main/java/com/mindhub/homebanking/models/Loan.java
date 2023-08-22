@@ -3,8 +3,8 @@ package com.mindhub.homebanking.models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Loan {
@@ -14,15 +14,15 @@ public class Loan {
     private Long id;
     private String name;
     private Double maxAmount;
-
     @ElementCollection
-    private List<Integer> payments = new ArrayList<>();
-    //@OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
-    //private Set<Account> accounts = new HashSet<>();
-
+    private Set<Integer> payments = new HashSet<>();
+    @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
+    private Set<ClientLoan> clientLoans = new HashSet<>();
+    //@ManyToMany(fetch = FetchType.EAGER)
+    //private Set<Client> clients = new HashSet<>();
 
     public Loan(){}
-    public Loan(String name, Double maxAmount, List<Integer> payments) {
+    public Loan(String name, Double maxAmount, Set<Integer> payments) {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
@@ -35,10 +35,10 @@ public class Loan {
         return name;
     }
     public Double getMaxAmount() { return maxAmount; }
-    public List<Integer> getPayments() {
+    public Set<Integer> getPayments() {
         return payments;
     }
-    //public Set<Account> getAccounts() {return accounts;}
+    public Set<ClientLoan> getClientLoans() { return clientLoans; }
 
     public void setName(String name) {
         if (!name.isBlank()) {
@@ -48,14 +48,16 @@ public class Loan {
     public void setMaxAmount(Double maxAmount) {
             this.maxAmount = maxAmount;
     }
-    public void setPayments(List<Integer> payments) {
+    public void setPayments(Set<Integer> payments) {
             this.payments = payments;
     }
-    //public void addAccount(Account account){
-    //    account.setClient(this);
-    //    this.accounts.add(account);
+    //public void setClients(Set<Client> clients) {
+    //    this.clients = clients;
     //}
-
+    public void addClientLoan(ClientLoan clientLoan){
+        clientLoan.setLoan(this);
+        clientLoans.add(clientLoan);
+    }
     public String toString() {
         return "Loan{" + '\'' +
                 "id=" + id + '\'' +

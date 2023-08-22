@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,11 +15,12 @@ public class Account {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String number;
-    private LocalDate creationDate;
+    private LocalDate date;
     private Double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
+    @JsonIgnore
     private Client client;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
@@ -26,9 +28,9 @@ public class Account {
 
     public Account(){}
 
-    public Account(String number, LocalDate creationDate, Double balance) {
+    public Account(String number, LocalDate date, Double balance) {
         this.number = number;
-        this.creationDate = creationDate;
+        this.date = date;
         this.balance = balance;
     }
 
@@ -41,8 +43,8 @@ public class Account {
     public String getNumber() {
         return number;
     }
-    public LocalDate getCreationDate() {
-        return creationDate;
+    public LocalDate getDate() {
+        return date;
     }
     public Double getBalance() {
         return balance;
@@ -57,13 +59,13 @@ public class Account {
             this.number = number;
         }
     }
-    public LocalDate setCreationDate() {
-        creationDate = LocalDate.now();
-        return creationDate;
+    public LocalDate setDate() {
+        date = LocalDate.now();
+        return date;
     }
-    public LocalDate setCreationDateTomorrow() {
-        creationDate = LocalDate.now().plusDays(1);
-        return creationDate;
+    public LocalDate setDateTomorrow() {
+        date = LocalDate.now().plusDays(1);
+        return date;
     }
     public void setBalance(Double balance) {
         this.balance = balance;
@@ -77,7 +79,7 @@ public class Account {
         return "Account{" + '\'' +
                 "id=" + id + '\'' +
                 ", number='" + number + '\'' +
-                ", creationDate='" + creationDate + '\'' +
+                ", date='" + date + '\'' +
                 ", balance='" + balance + '\'' +
                 '}';
     }
