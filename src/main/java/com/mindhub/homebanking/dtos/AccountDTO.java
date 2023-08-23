@@ -25,7 +25,6 @@ public class AccountDTO {
         return balance;
     }
 
-    //private Set<Account> accounts = new HashSet<>();
     public Set<TransactionDTO> getTransactions() {return transactions;}
 
     public AccountDTO(Account account) {

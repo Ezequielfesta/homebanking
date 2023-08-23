@@ -1,9 +1,7 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Transaction;
-
 import java.time.LocalDateTime;
-
 
 public class TransactionDTO {
 

@@ -17,10 +17,11 @@ public class Client {
     private String email;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
-    //@ManyToMany (mappedBy = "clients",fetch = FetchType.EAGER)
-    //private Set<Loan> loans = new HashSet<>();
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<ClientLoan> clientLoans = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
+    private Set<Card> cards = new HashSet<>();
 
     public Client(){}
     public Client(String firstName,String lastName,String email) {
@@ -45,6 +46,7 @@ public class Client {
     public Set<ClientLoan> getClientLoans() {
         return clientLoans;
     }
+    public Set<Card> getCards() {return cards;}
 
     public void setFirstName(String firstName) {
         if (!firstName.isBlank()) {
@@ -68,6 +70,11 @@ public class Client {
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setClient(this);
         clientLoans.add(clientLoan);
+    }
+
+    public void addCard(Card card){
+        card.setClient(this);
+        this.cards.add(card);
     }
 
     public String toString() {

@@ -6,6 +6,7 @@ import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.repositories.ClientLoanRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.repositories.CardRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +25,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);}
 
 	@Bean
-	public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, TransactionRepository transactionRepository) {
+	public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, TransactionRepository transactionRepository, CardRepository cardRepository) {
 		return args -> {
 
 			Client client1 = new Client("Melba","Morel","melba@mindhub.com");
@@ -99,6 +100,19 @@ public class HomebankingApplication {
 			client2.addClientLoan(clientLoan4);
 			loan3.addClientLoan(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
+
+			Card card1 = new Card(null,Card.CardType.DEBIT,Card.CardColor.GOLD,"1234-5678-9101","101",LocalDate.now(),LocalDate.now().plusYears(5));
+			card1.setCardHolder(null);
+			Card card2 = new Card(null,Card.CardType.CREDIT,Card.CardColor.TITANIUM,"1234-8765-9991","991",LocalDate.now(),LocalDate.now().plusYears(5));
+			card2.setCardHolder(null);
+			Card card3 = new Card(null,Card.CardType.CREDIT,Card.CardColor.SILVER,"1234-8766-8881","881",LocalDate.now(),LocalDate.now().plusYears(5));
+			card3.setCardHolder(null);
+			client1.addCard(card1);
+			client1.addCard(card2);
+			client2.addCard(card3);
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 		};
 	}
 }
