@@ -7,13 +7,14 @@ import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.repositories.ClientLoanRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import com.mindhub.homebanking.repositories.CardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 // import java.util.ArrayList;
@@ -24,30 +25,32 @@ public class HomebankingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);}
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@Bean
 	public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, TransactionRepository transactionRepository, CardRepository cardRepository) {
 		return args -> {
 
-			Client client1 = new Client("Melba","Morel","melba@mindhub.com");
+			Client client1 = new Client("Melba","Morel","melba@mindhub.com",passwordEncoder.encode("melba"));
 			clientRepository.save(client1);
-			Client client2 = new Client("Albert","Eins","alber@mindhub.com");
+			Client client2 = new Client("Albert","Eins","albert@mindhub.com",passwordEncoder.encode("albert"));
 			clientRepository.save(client2);
 
 			Account account1 = new Account();
 			account1.setNumber("VIN001");
-			account1.setDate();
+			account1.setCreationDate();
 			account1.setBalance(5000.0d);
 			client1.addAccount(account1);
 			accountRepository.save(account1);
 			Account account2 = new Account();
 			account2.setNumber("VIN002");
-			account2.setDateTomorrow();
+			account2.setCreationDateTomorrow();
 			account2.setBalance(7500.0d);
 			client1.addAccount(account2);
 			accountRepository.save(account2);
 			Account account3 = new Account();
 			account3.setNumber("VIN003");
-			account3.setDate();
+			account3.setCreationDate();
 			account3.setBalance(4000.0d);
 			client2.addAccount(account3);
 			accountRepository.save(account3);
@@ -75,9 +78,6 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction3);
 
 			Loan loan1 = new Loan("Mortgage",500000d, Set.of(12,24,36,48,60));
-			//loan1.setName("Mortgage");
-			//loan1.setMaxAmount(500000d);
-			//loan1.setPayments(Set.of(12,24,36,48,60));
 			loanRepository.save(loan1);
 			Loan loan2 = new Loan("Personal",100000d,Set.of(6,12,24));
 			loanRepository.save(loan2);

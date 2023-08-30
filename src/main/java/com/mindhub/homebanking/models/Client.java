@@ -14,7 +14,9 @@ public class Client {
     private Long id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
+    private String password;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
@@ -24,10 +26,11 @@ public class Client {
     private Set<Card> cards = new HashSet<>();
 
     public Client(){}
-    public Client(String firstName,String lastName,String email) {
+    public Client(String firstName,String lastName,String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
     public Long getId(){
@@ -42,6 +45,7 @@ public class Client {
     public String getEmail() {
         return email;
     }
+    public String getPassword() {return password;}
     public Set<Account> getAccounts() {return accounts;}
     public Set<ClientLoan> getClientLoans() {
         return clientLoans;
@@ -63,6 +67,11 @@ public class Client {
             this.email = email;
         }
     }
+    public void setPassword(String password) {
+        if (!password.isBlank()) {
+            this.password = password;
+        }
+    }
     public void addAccount(Account account){
         account.setClient(this);
         this.accounts.add(account);
@@ -80,7 +89,7 @@ public class Client {
     public String toString() {
         return "Client{" + '\'' +
                 "id=" + id + '\'' +
-                ",firstName='" + firstName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
