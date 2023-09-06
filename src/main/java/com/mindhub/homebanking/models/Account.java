@@ -5,17 +5,19 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @Entity
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String number;
-    private LocalDate creationDate;
-    private Double balance;
+    private LocalDate date;
+    private Double balance = 0d;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
@@ -27,9 +29,9 @@ public class Account {
 
     public Account(){}
 
-    public Account(String number, LocalDate creationDate, Double balance) {
+    public Account(String number, LocalDate date, Double balance) {
         this.number = number;
-        this.creationDate = creationDate;
+        this.date = date;
         this.balance = balance;
     }
 
@@ -42,8 +44,8 @@ public class Account {
     public String getNumber() {
         return number;
     }
-    public LocalDate getCreationDate() {
-        return creationDate;
+    public LocalDate getDate() {
+        return date;
     }
     public Double getBalance() {
         return balance;
@@ -53,18 +55,19 @@ public class Account {
     public void setClient(Client client) {
         this.client = client;
     }
+
+    public String getRandomNumber() {
+        Random random = new Random();
+        return "VIN-" + String.format("%08d", (random.nextInt(100000000) + 1));
+    }
     public void setNumber(String number) {
         if (!number.isBlank()) {
             this.number = number;
         }
     }
-    public LocalDate setCreationDate() {
-        creationDate = LocalDate.now();
-        return creationDate;
-    }
-    public LocalDate setCreationDateTomorrow() {
-        creationDate = LocalDate.now().plusDays(1);
-        return creationDate;
+
+    public void setDate() {
+        date = LocalDate.now();
     }
     public void setBalance(Double balance) {
         this.balance = balance;
@@ -78,7 +81,7 @@ public class Account {
         return "Account{" + '\'' +
                 "id=" + id + '\'' +
                 ", number='" + number + '\'' +
-                ", creationDate='" + creationDate + '\'' +
+                ", date='" + date + '\'' +
                 ", balance='" + balance + '\'' +
                 '}';
     }

@@ -13,11 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.time.LocalDate;
 import java.util.Set;
-
-// import java.util.ArrayList;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -33,25 +30,16 @@ public class HomebankingApplication {
 
 			Client client1 = new Client("Melba","Morel","melba@mindhub.com",passwordEncoder.encode("melba"));
 			clientRepository.save(client1);
-			Client client2 = new Client("Albert","Eins","albert@mindhub.com",passwordEncoder.encode("albert"));
+			Client client2 = new Client("Albert","Einstein","albert@mindhub.com",passwordEncoder.encode("albert"));
 			clientRepository.save(client2);
 
-			Account account1 = new Account();
-			account1.setNumber("VIN001");
-			account1.setCreationDate();
-			account1.setBalance(5000.0d);
+			Account account1 = new Account("VIN-00000001",LocalDate.now(),5000d);
 			client1.addAccount(account1);
 			accountRepository.save(account1);
-			Account account2 = new Account();
-			account2.setNumber("VIN002");
-			account2.setCreationDateTomorrow();
-			account2.setBalance(7500.0d);
+			Account account2 = new Account("VIN-00000002",LocalDate.now().plusDays(1),7500d);
 			client1.addAccount(account2);
 			accountRepository.save(account2);
-			Account account3 = new Account();
-			account3.setNumber("VIN003");
-			account3.setCreationDate();
-			account3.setBalance(4000.0d);
+			Account account3 = new Account("VIN-00000003",LocalDate.now(),4000d);
 			client2.addAccount(account3);
 			accountRepository.save(account3);
 
@@ -102,11 +90,11 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan4);
 
 			Card card1 = new Card(null,Card.CardType.DEBIT,Card.CardColor.GOLD,"1234-5678-9101","101",LocalDate.now(),LocalDate.now().plusYears(5));
-			card1.setCardHolder(null);
+			card1.setCardHolder(client1);
 			Card card2 = new Card(null,Card.CardType.CREDIT,Card.CardColor.TITANIUM,"1234-8765-9991","991",LocalDate.now(),LocalDate.now().plusYears(5));
-			card2.setCardHolder(null);
+			card2.setCardHolder(client1);
 			Card card3 = new Card(null,Card.CardType.CREDIT,Card.CardColor.SILVER,"1234-8766-8881","881",LocalDate.now(),LocalDate.now().plusYears(5));
-			card3.setCardHolder(null);
+			card3.setCardHolder(client2);
 			client1.addCard(card1);
 			client1.addCard(card2);
 			client2.addCard(card3);

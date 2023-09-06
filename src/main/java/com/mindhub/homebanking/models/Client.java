@@ -72,7 +72,7 @@ public class Client {
             this.password = password;
         }
     }
-    public void addAccount(Account account){
+    public void addAccount(Account account) {
         account.setClient(this);
         this.accounts.add(account);
     }

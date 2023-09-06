@@ -76,7 +76,10 @@ public class Card {
         return client;
     }
 
-    public void setCardHolder(String cardHolder) {
+    public void setCardHolder(Client client) {
+        this.cardHolder = client.getFirstName() + " " + client.getLastName();
+    }
+    public void setCardHolderString(String cardHolder) {
         this.cardHolder = cardHolder;
     }
     public void setCardType(CardType cardType) {
