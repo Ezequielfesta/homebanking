@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,7 +35,13 @@ public class CardController {
         {
             return new ResponseEntity<>("Up to 3 cards of the same type allowed", HttpStatus.FORBIDDEN);
         } else {
-            Card card = new Card(cardHolder, cardType, cardColor, "1234-5678", "123", LocalDate.now(), LocalDate.now().plusYears(5));
+            Card card = new Card(cardHolder, cardType, cardColor, null, null, LocalDate.now(), LocalDate.now().plusYears(5));
+            String randomNumber = card.getRandomNumber();
+            while(cardRepository.existsByNumber(randomNumber)){
+                randomNumber = card.getRandomNumber();
+            }
+            card.setNumber(randomNumber);
+            card.setCvv();
             client.addCard(card);
             cardRepository.save(card);
             return new ResponseEntity<>(HttpStatus.CREATED);

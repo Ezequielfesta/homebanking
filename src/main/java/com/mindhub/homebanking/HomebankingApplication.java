@@ -89,11 +89,11 @@ public class HomebankingApplication {
 			loan3.addClientLoan(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
 
-			Card card1 = new Card(null,Card.CardType.DEBIT,Card.CardColor.GOLD,"1234-5678-9101","101",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card1 = new Card(null,Card.CardType.DEBIT,Card.CardColor.GOLD,"1234-5678-9101-1234","101",LocalDate.now(),LocalDate.now().plusYears(5));
 			card1.setCardHolder(client1);
-			Card card2 = new Card(null,Card.CardType.CREDIT,Card.CardColor.TITANIUM,"1234-8765-9991","991",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card2 = new Card(null,Card.CardType.CREDIT,Card.CardColor.TITANIUM,"1234-8765-9991-1234","991",LocalDate.now(),LocalDate.now().plusYears(5));
 			card2.setCardHolder(client1);
-			Card card3 = new Card(null,Card.CardType.CREDIT,Card.CardColor.SILVER,"1234-8766-8881","881",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card3 = new Card(null,Card.CardType.CREDIT,Card.CardColor.SILVER,"1234-8766-8881-1234","881",LocalDate.now(),LocalDate.now().plusYears(5));
 			card3.setCardHolder(client2);
 			client1.addCard(card1);
 			client1.addCard(card2);
