@@ -9,5 +9,7 @@ import java.util.List;
 @RepositoryRestResource
 public interface AccountRepository extends JpaRepository<Account, Long> {
     List<Account> findByClient (Client client);
+    Account findByNumber (String number);
     Boolean existsByNumber (String number);
+
 }
