@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,10 +38,16 @@ public class AccountController {
     }
 
    @RequestMapping("/clients/current/accounts")
+   public Set<Account> getAccounts(Authentication authentication) {
+       Client client = clientRepository.findByEmail(authentication.getName());
+       return accountRepository.findByClient(client);
+    }
+
+   @RequestMapping(path="/clients/current/accounts",method= RequestMethod.POST)
     public ResponseEntity<Object> addAccount (Authentication authentication) {
        Client client = clientRepository.findByEmail(authentication.getName());
-       List<Account> listAccount = accountRepository.findByClient(client);
-       if (listAccount.size() == 3) {
+       Set<Account> setAccount = accountRepository.findByClient(client);
+       if (setAccount.size() == 3) {
            return new ResponseEntity<>("Up to 3 accounts per client allowed", HttpStatus.FORBIDDEN);
        } else {
            Account account = new Account();

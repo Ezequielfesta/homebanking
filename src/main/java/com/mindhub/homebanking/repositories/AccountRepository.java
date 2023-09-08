@@ -5,10 +5,11 @@ import com.mindhub.homebanking.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
+import java.util.Set;
 
 @RepositoryRestResource
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    List<Account> findByClient (Client client);
+    Set<Account> findByClient (Client client);
     Account findByNumber (String number);
     Boolean existsByNumber (String number);
 

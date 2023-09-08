@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,54 +40,55 @@ public class TransactionController {
         return listTransactionDTO;
     }
 
-
-    public enum TransferType {
+    /*public enum TransferType {
         own,
         third
-    }
+    }*/
     @RequestMapping(path= "/transactions",method = RequestMethod.POST)
     @Transactional
-    public ResponseEntity<Object> transfer (Authentication authentication, @RequestParam TransferType trasnferType, @RequestParam String accountFromNumber, @RequestParam String accountToNumber, @RequestParam Double amount, @RequestParam String description)  {
+    public ResponseEntity<Object> transfer (Authentication authentication, /*@RequestParam TransferType trasnferType,*/ @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
 
-        Client client = clientRepository.findByEmail(authentication.getName());
-        List<Account> clientAccounts = accountRepository.findByClient(client);
-
-        if (trasnferType == TransferType.third) {
-            return new ResponseEntity<>("Not implemented", HttpStatus.FORBIDDEN);
-        }
-        if (accountFromNumber.isEmpty() || accountToNumber.isEmpty() || amount!=null || description.isEmpty()) {
+        if (fromAccountNumber.isEmpty() || toAccountNumber.isEmpty() || amount==null || description.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-        if (accountRepository.findByNumber(accountFromNumber) == null) {
+        if (amount<=0) {
+            return new ResponseEntity<>("Amount must be greater than zero", HttpStatus.FORBIDDEN);
+        }
+        if (!accountRepository.existsByNumber(fromAccountNumber)) {
             return new ResponseEntity<>("Origin account doesn't exist", HttpStatus.FORBIDDEN);
         }
-        if (trasnferType == TransferType.own && !accountRepository.existsByNumber(accountToNumber)) {
-            return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
-        } //else if (trasnferType == TransferType.third){}
-
-        if (accountFromNumber.equals(accountToNumber)) {
-            return new ResponseEntity<>("Origin and destination accounts must be different", HttpStatus.FORBIDDEN);
-        }
-        Account accountFrom = accountRepository.findByNumber(accountFromNumber);
+        Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
         if (!accountFrom.getClient().getEmail().equals(authentication.getName())) {
             return new ResponseEntity<>("Origin account must be yours", HttpStatus.FORBIDDEN);
+        }
+        if (!accountRepository.existsByNumber(toAccountNumber)) {
+            return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
+        }
+        Account accountTo = accountRepository.findByNumber(toAccountNumber);
+        //if (trasnferType == TransferType.own && !accountTo.getClient().getEmail().equals(authentication.getName())) {
+        //    return new ResponseEntity<>("Destination account must be yours", HttpStatus.FORBIDDEN);
+        //}
+        //if (trasnferType == TransferType.third && accountTo.getClient().getEmail().equals(authentication.getName())) {
+        //    return new ResponseEntity<>("Destination account must not be yours", HttpStatus.FORBIDDEN);
+        //}
+        if (fromAccountNumber.equals(toAccountNumber)) {
+            return new ResponseEntity<>("Origin and destination accounts must be different", HttpStatus.FORBIDDEN);
         }
         if (accountFrom.getBalance() < amount) {
             return new ResponseEntity<>("Insufficient funds", HttpStatus.FORBIDDEN);
         }
-        Transaction transactionDebit = new Transaction(Transaction.TransactionType.DEBIT, amount, accountFromNumber + description, LocalDateTime.now());
-        Transaction transactionCredit = new Transaction(Transaction.TransactionType.CREDIT, amount, accountToNumber + description, LocalDateTime.now());
-        if (trasnferType == TransferType.own && accountRepository.existsByNumber(accountToNumber)) {
-            Account accountTo = accountRepository.findByNumber(accountToNumber);
-            transactionCredit.setAccount(accountTo);
-            accountTo.setBalance(accountFrom.getBalance()+transactionCredit.getAmount());
-            accountRepository.save(accountTo);
-        } //else if trasnferType == TransferType.third {}
+
+        Transaction transactionDebit = new Transaction(Transaction.TransactionType.DEBIT, amount, fromAccountNumber + " " + description, LocalDateTime.now());
+        Transaction transactionCredit = new Transaction(Transaction.TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now());
         transactionDebit.setAccount(accountFrom);
         accountFrom.setBalance(accountFrom.getBalance()-transactionDebit.getAmount());
+        transactionCredit.setAccount(accountTo);
+        accountTo.setBalance(accountTo.getBalance()+transactionCredit.getAmount());
+
         transactionRepository.save(transactionDebit);
         transactionRepository.save(transactionCredit);
         accountRepository.save(accountFrom);
+        accountRepository.save(accountTo);
         return new ResponseEntity<>("Transfer successful", HttpStatus.CREATED);
     }
 }
