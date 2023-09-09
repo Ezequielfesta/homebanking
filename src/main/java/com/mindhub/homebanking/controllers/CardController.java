@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,9 +29,9 @@ public class CardController {
     {
         Client client = clientRepository.findByEmail(authentication.getName());
         String cardHolder = client.getFirstName() + " " + client.getLastName();
-        List<Card> listCard = cardRepository.findByCardHolder(cardHolder);
-        List<Card> listCardTypeDebit = listCard.stream().filter(card -> card.getCardType().equals(Card.CardType.DEBIT)).collect(Collectors.toList());
-        List<Card> listCardTypeCredit = listCard.stream().filter(card -> card.getCardType().equals(Card.CardType.CREDIT)).collect(Collectors.toList());
+        Set<Card> setCard = cardRepository.findByCardHolder(cardHolder);
+        Set<Card> listCardTypeDebit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.DEBIT)).collect(Collectors.toSet());
+        Set<Card> listCardTypeCredit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.CREDIT)).collect(Collectors.toSet());
         if (((cardType == Card.CardType.DEBIT) && (listCardTypeDebit.size() == 3)) || ((cardType == Card.CardType.CREDIT) && (listCardTypeCredit.size() == 3)))
         {
             return new ResponseEntity<>("Up to 3 cards of the same type allowed", HttpStatus.FORBIDDEN);

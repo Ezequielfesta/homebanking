@@ -51,7 +51,7 @@ public class AccountController {
            return new ResponseEntity<>("Up to 3 accounts per client allowed", HttpStatus.FORBIDDEN);
        } else {
            Account account = new Account();
-           account.setDate();
+           account.setCreationDate();
            String randomNumber = account.getRandomNumber();
            while(accountRepository.existsByNumber(randomNumber)){
                randomNumber = account.getRandomNumber();

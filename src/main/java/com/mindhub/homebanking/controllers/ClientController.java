@@ -46,7 +46,7 @@ public class ClientController {
             randomNumber = account.getRandomNumber();
         }
         account.setNumber(randomNumber);
-        account.setDate();
+        account.setCreationDate();
         client.addAccount(account);
         clientRepository.save(client);
         accountRepository.save(account);

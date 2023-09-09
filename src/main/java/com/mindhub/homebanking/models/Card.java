@@ -2,7 +2,6 @@ package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Random;
@@ -112,13 +111,5 @@ public class Card {
     }
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public String toString() {
-        return "Card{" + '\'' +
-                "id=" + id + '\'' +
-                ",cardHolder='" + cardHolder + '\'' +
-                ", number='" + number + '\'' +
-                '}';
     }
 }

@@ -2,7 +2,6 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,17 +33,12 @@ public class TransactionController {
     @RequestMapping("/transactions")
     public List<TransactionDTO> getTransaction() {
         List<Transaction> listTransaction = transactionRepository.findAll();
-        List<TransactionDTO> listTransactionDTO = listTransaction.stream().map( transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
-        return listTransactionDTO;
+        return listTransaction.stream().map( transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }
 
-    /*public enum TransferType {
-        own,
-        third
-    }*/
     @RequestMapping(path= "/transactions",method = RequestMethod.POST)
     @Transactional
-    public ResponseEntity<Object> transfer (Authentication authentication, /*@RequestParam TransferType trasnferType,*/ @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
+    public ResponseEntity<Object> transfer (Authentication authentication, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
 
         if (fromAccountNumber.isEmpty() || toAccountNumber.isEmpty() || amount==null || description.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -65,12 +57,6 @@ public class TransactionController {
             return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
         }
         Account accountTo = accountRepository.findByNumber(toAccountNumber);
-        //if (trasnferType == TransferType.own && !accountTo.getClient().getEmail().equals(authentication.getName())) {
-        //    return new ResponseEntity<>("Destination account must be yours", HttpStatus.FORBIDDEN);
-        //}
-        //if (trasnferType == TransferType.third && accountTo.getClient().getEmail().equals(authentication.getName())) {
-        //    return new ResponseEntity<>("Destination account must not be yours", HttpStatus.FORBIDDEN);
-        //}
         if (fromAccountNumber.equals(toAccountNumber)) {
             return new ResponseEntity<>("Origin and destination accounts must be different", HttpStatus.FORBIDDEN);
         }

@@ -41,18 +41,7 @@ public class ClientLoan {
     public void setClient(Client client) {
         this.client = client;
     }
-
     public void setLoan(Loan loan) {
         this.loan = loan;
-    }
-
-    public String toString() {
-        return "Loan{" + '\'' +
-                "id=" + id + '\'' +
-                "loanId=" + loan.getId() + '\'' +
-                "name=" + loan.getName() + '\'' +
-                ", amount='" + amount + '\'' +
-                ", payments='" + payments + '\'' +
-                '}';
     }
 }

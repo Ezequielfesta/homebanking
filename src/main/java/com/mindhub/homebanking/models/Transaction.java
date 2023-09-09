@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -67,15 +66,4 @@ public class Transaction {
     }
     public void setTypeCredit(){ type = TransactionType.CREDIT; }
     public void setTypeDebit(){ type = TransactionType.DEBIT; }
-
-    public String toString() {
-        return "Transaction{" + '\'' +
-                "id=" + id + '\'' +
-                ", account='" + account + '\'' +
-                ", type='" + type + '\'' +
-                ", amount='" + amount + '\'' +
-                ", date='" + date + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

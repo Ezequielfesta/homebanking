@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -84,14 +83,5 @@ public class Client {
     public void addCard(Card card){
         card.setClient(this);
         this.cards.add(card);
-    }
-
-    public String toString() {
-        return "Client{" + '\'' +
-                "id=" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface LoanRepository extends JpaRepository<Loan, Long> {
-     //   List<Loan> findByName(String name);
+    Loan findById(Double loanId);
     }

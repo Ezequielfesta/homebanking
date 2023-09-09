@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Card;
-
 import java.time.LocalDate;
 
 public class CardDTO {
@@ -26,28 +25,6 @@ public class CardDTO {
     public String getCvv() { return cvv; }
     public LocalDate getFromDate() { return fromDate; }
     public LocalDate getThruDate() { return thruDate; }
-
-    public void setCardHolder(String cardHolder) {
-        this.cardHolder = cardHolder;
-    }
-    public void setType(Card.CardType type) {
-        this.type = type;
-    }
-    public void setColor(Card.CardColor color) {
-        this.color = color;
-    }
-    public void setNumber(String number) {
-        this.number = number;
-    }
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
-    }
-    public void setThruDate(LocalDate thruDate) {
-        this.thruDate = thruDate;
-    }
 
     public CardDTO(Card card) {
         id = card.getId();

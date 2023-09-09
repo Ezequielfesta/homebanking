@@ -53,12 +53,4 @@ public class Loan {
         clientLoan.setLoan(this);
         clientLoans.add(clientLoan);
     }
-    public String toString() {
-        return "Loan{" + '\'' +
-                "id=" + id + '\'' +
-                ",name='" + name + '\'' +
-                ", maxAmount='" + maxAmount + '\'' +
-                ", payments='" + payments + '\'' +
-                '}';
-    }
 }
