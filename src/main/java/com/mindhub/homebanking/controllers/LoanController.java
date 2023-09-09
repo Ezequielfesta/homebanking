@@ -40,15 +40,36 @@ public class LoanController {
     @RequestMapping(path="/loans",method=RequestMethod.POST)
     @Transactional
     public ResponseEntity<Object> addClientLoan (Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO) {
-        Client client = clientRepository.findByEmail(authentication.getName());
+        if (loanApplicationDTO.getAmount() == null || loanApplicationDTO.getPayments() == null || loanApplicationDTO.getToAccountNumber() == null) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (loanApplicationDTO.getAmount() <= 0) {
+            return new ResponseEntity<>("Amount must be greater than zero", HttpStatus.FORBIDDEN);
+        }
+        if (loanApplicationDTO.getPayments() <= 0) {
+            return new ResponseEntity<>("Payments must be greater than zero", HttpStatus.FORBIDDEN);
+        }
+        if (!loanRepository.existsById(loanApplicationDTO.getLoanId())) {
+            return new ResponseEntity<>("Loan doesn't exist", HttpStatus.FORBIDDEN);
+        }
         Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
-        ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()*1.2,loanApplicationDTO.getPayments(),client,loan);
+        if (loanApplicationDTO.getAmount() > loan.getMaxAmount()) {
+            return new ResponseEntity<>("Amount exceeds maximum", HttpStatus.FORBIDDEN);
+        }
+        if (!loan.getPayments().contains(loanApplicationDTO.getPayments())) {
+            return new ResponseEntity<>("This amount of payments is not allowed in this loan", HttpStatus.FORBIDDEN);
+        }
+        if (!accountRepository.existsByNumber(loanApplicationDTO.getToAccountNumber())) {
+            return new ResponseEntity<>("Destination account doesn't exist", HttpStatus.FORBIDDEN);
+        }
         Account account = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
+        if (!account.getClient().getEmail().equals(authentication.getName())) {
+            return new ResponseEntity<>("Destination account must be yours", HttpStatus.FORBIDDEN);
+        }
+        Client client = clientRepository.findByEmail(authentication.getName());
+        ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()*1.2,loanApplicationDTO.getPayments(),client,loan);
         account.setBalance(account.getBalance()+ loanApplicationDTO.getAmount());
-        Transaction transaction = new Transaction(Transaction.TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan", LocalDateTime.now());
-        //if (setAccount.size() == 3) {
-        //    return new ResponseEntity<>("Up to 3 accounts per client allowed", HttpStatus.FORBIDDEN);
-        //}
+        Transaction transaction = new Transaction(Transaction.TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan approved", LocalDateTime.now());
         account.addTransaction(transaction);
         transactionRepository.save(transaction);
         accountRepository.save(account);
