@@ -19,11 +19,11 @@ import java.util.Set;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HomebankingApplication.class, args);}
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	public static void main(String[] args) {
+		SpringApplication.run(HomebankingApplication.class, args);}
 	@Bean
 	public CommandLineRunner init(ClientRepository clientRepository, AccountRepository accountRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, TransactionRepository transactionRepository, CardRepository cardRepository) {
 		return args -> {
@@ -44,21 +44,21 @@ public class HomebankingApplication {
 			accountRepository.save(account3);
 
 			Transaction transaction1 = new Transaction();
-			transaction1.setType(Transaction.TransactionType.DEBIT);
+			transaction1.setType(TransactionType.DEBIT);
 			transaction1.setDate();
 			transaction1.setAmount(-1500d);
 			transaction1.setDescription("Grocery");
 			transaction1.setAccount(account1);
 			transactionRepository.save(transaction1);
 			Transaction transaction2 = new Transaction();
-			transaction2.setType(Transaction.TransactionType.CREDIT);
+			transaction2.setType(TransactionType.CREDIT);
 			transaction2.setDate();
 			transaction2.setAmount(1200d);
 			transaction2.setDescription("School");
 			transaction2.setAccount(account1);
 			transactionRepository.save(transaction2);
 			Transaction transaction3 = new Transaction();
-			transaction3.setType(Transaction.TransactionType.DEBIT);
+			transaction3.setType(TransactionType.DEBIT);
 			transaction3.setDate();
 			transaction3.setAmount(-2000d);
 			transaction3.setDescription("TV Purchase");
@@ -89,11 +89,11 @@ public class HomebankingApplication {
 			loan3.addClientLoan(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
 
-			Card card1 = new Card(null,Card.CardType.DEBIT,Card.CardColor.GOLD,"1234-5678-9101-1234","101",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card1 = new Card(null,CardType.DEBIT,CardColor.GOLD,"1234-5678-9101-1234","101",LocalDate.now(),LocalDate.now().plusYears(5));
 			card1.setCardHolder(client1);
-			Card card2 = new Card(null,Card.CardType.CREDIT,Card.CardColor.TITANIUM,"1234-8765-9991-1234","991",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card2 = new Card(null,CardType.CREDIT,CardColor.TITANIUM,"1234-8765-9991-1234","991",LocalDate.now(),LocalDate.now().plusYears(5));
 			card2.setCardHolder(client1);
-			Card card3 = new Card(null,Card.CardType.CREDIT,Card.CardColor.SILVER,"1234-8766-8881-1234","881",LocalDate.now(),LocalDate.now().plusYears(5));
+			Card card3 = new Card(null,CardType.CREDIT,CardColor.SILVER,"1234-8766-8881-1234","881",LocalDate.now(),LocalDate.now().plusYears(5));
 			card3.setCardHolder(client2);
 			client1.addCard(card1);
 			client1.addCard(card2);

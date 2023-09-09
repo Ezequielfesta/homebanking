@@ -6,10 +6,6 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Transaction {
-    public enum TransactionType {
-        CREDIT,
-        DEBIT
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")

@@ -69,7 +69,7 @@ public class LoanController {
         Client client = clientRepository.findByEmail(authentication.getName());
         ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()*1.2,loanApplicationDTO.getPayments(),client,loan);
         account.setBalance(account.getBalance()+ loanApplicationDTO.getAmount());
-        Transaction transaction = new Transaction(Transaction.TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan approved", LocalDateTime.now());
+        Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " loan approved", LocalDateTime.now());
         account.addTransaction(transaction);
         transactionRepository.save(transaction);
         accountRepository.save(account);

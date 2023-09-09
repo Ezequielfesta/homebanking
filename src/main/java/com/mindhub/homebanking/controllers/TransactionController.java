@@ -3,6 +3,7 @@ package com.mindhub.homebanking.controllers;
 import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Transaction;
+import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
@@ -62,8 +63,8 @@ public class TransactionController {
             return new ResponseEntity<>("Insufficient funds", HttpStatus.FORBIDDEN);
         }
 
-        Transaction transactionDebit = new Transaction(Transaction.TransactionType.DEBIT, amount, fromAccountNumber + " " + description, LocalDateTime.now());
-        Transaction transactionCredit = new Transaction(Transaction.TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now());
+        Transaction transactionDebit = new Transaction(TransactionType.DEBIT, amount, fromAccountNumber + " " + description, LocalDateTime.now());
+        Transaction transactionCredit = new Transaction(TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now());
         transactionDebit.setAccount(accountFrom);
         accountFrom.setBalance(accountFrom.getBalance()-transactionDebit.getAmount());
         transactionCredit.setAccount(accountTo);

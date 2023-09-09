@@ -8,16 +8,6 @@ import java.util.Random;
 
 @Entity
 public class Card {
-
-    public enum CardType {
-        CREDIT,
-        DEBIT
-    }
-    public enum CardColor {
-        GOLD,
-        SILVER,
-        TITANIUM
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
