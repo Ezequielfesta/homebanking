@@ -17,28 +17,23 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class ClientController {
-
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
 
-    public ResponseEntity<Object> register(
-
-            @RequestParam String firstName, @RequestParam String lastName,
-            @RequestParam String email, @RequestParam String password) {
-
+    public ResponseEntity<Object> register(@RequestParam String firstName, @RequestParam String lastName,
+                                           @RequestParam String email, @RequestParam String password) {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-
         if (clientRepository.findByEmail(email) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
-
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         Account account = new Account();
         String randomNumber = account.getRandomNumber();
@@ -59,7 +54,6 @@ public class ClientController {
         List<ClientDTO> listClientDTO = listClient.stream().map( client -> new ClientDTO(client)).collect(Collectors.toList());
         return listClientDTO;
     }
-
     @RequestMapping(path = "/clients/{id}", method = RequestMethod.POST)
     public ClientDTO getClient(@PathVariable Long id){
         return new ClientDTO(clientRepository.findById(id).orElse(null));
@@ -68,5 +62,4 @@ public class ClientController {
     public ClientDTO getClient(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
-
 }

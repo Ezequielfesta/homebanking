@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -32,6 +31,7 @@ public class AccountController {
         List<AccountDTO> listAccountDTO = listAccount.stream().map( account -> new AccountDTO(account)).collect(Collectors.toList());
         return listAccountDTO;
     }
+
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
         return new AccountDTO(accountRepository.findById(id).orElse(null));

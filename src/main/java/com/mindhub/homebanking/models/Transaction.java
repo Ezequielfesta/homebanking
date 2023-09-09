@@ -18,7 +18,6 @@ public class Transaction {
     private Double amount;
     private String description;
     private LocalDateTime date;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account account;
@@ -66,4 +65,5 @@ public class Transaction {
     }
     public void setTypeCredit(){ type = TransactionType.CREDIT; }
     public void setTypeDebit(){ type = TransactionType.DEBIT; }
+    public void setType(TransactionType transactionType) { type = transactionType; }
 }

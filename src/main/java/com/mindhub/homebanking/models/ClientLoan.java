@@ -38,6 +38,13 @@ public class ClientLoan {
     }
     public Client getClient() { return client; }
     public Loan getLoan() { return loan; }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+    public void setPayments(Integer payments) {
+        this.payments = payments;
+    }
     public void setClient(Client client) {
         this.client = client;
     }

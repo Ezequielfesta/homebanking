@@ -13,6 +13,17 @@ public class CardDTO {
     private LocalDate fromDate;
     private LocalDate thruDate;
 
+    public CardDTO(Card card) {
+        id = card.getId();
+        cardHolder = card.getClient().getFirstName() + " " + card.getClient().getLastName();
+        type = card.getCardType();
+        color = card.getCardColor();
+        number = card.getNumber();
+        cvv = card.getCvv();
+        fromDate = card.getFromDate();
+        thruDate = card.getThruDate();
+    }
+
     public Long getId() {
         return id;
     }
@@ -25,15 +36,4 @@ public class CardDTO {
     public String getCvv() { return cvv; }
     public LocalDate getFromDate() { return fromDate; }
     public LocalDate getThruDate() { return thruDate; }
-
-    public CardDTO(Card card) {
-        id = card.getId();
-        cardHolder = card.getClient().getFirstName() + " " + card.getClient().getLastName();
-        type = card.getCardType();
-        color = card.getCardColor();
-        number = card.getNumber();
-        cvv = card.getCvv();
-        fromDate = card.getFromDate();
-        thruDate = card.getThruDate();
-    }
 }

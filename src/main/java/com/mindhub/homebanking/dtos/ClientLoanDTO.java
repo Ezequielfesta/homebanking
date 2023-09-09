@@ -12,9 +12,19 @@ public class ClientLoanDTO {
     private Client client;
     private Loan loan;
 
+    public ClientLoanDTO(ClientLoan clientLoan) {
+        id = clientLoan.getId();
+        amount = clientLoan.getAmount();
+        payments = clientLoan.getPayments();
+        client = clientLoan.getClient();
+        loan = clientLoan.getLoan();
+        name = loan.getName();
+    }
+
     public Long getId() {
         return id;
     }
+    public String getName() { return name; }
     public Double getAmount() {
         return amount;
     }
@@ -25,15 +35,4 @@ public class ClientLoanDTO {
         return client;
     }
     public Loan getLoan() { return loan; }
-
-    public String getName() { return name; }
-
-    public ClientLoanDTO(ClientLoan clientLoan) {
-        id = clientLoan.getId();
-        amount = clientLoan.getAmount();
-        payments = clientLoan.getPayments();
-        client = clientLoan.getClient();
-        loan = clientLoan.getLoan();
-        name = loan.getName();
-    }
 }

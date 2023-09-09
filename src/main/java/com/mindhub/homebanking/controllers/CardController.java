@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,15 +24,13 @@ public class CardController {
     private CardRepository cardRepository;
 
     @RequestMapping("/clients/current/cards")
-    public ResponseEntity<Object> addCard (Authentication authentication, @RequestParam Card.CardType cardType, @RequestParam Card.CardColor cardColor)
-    {
+    public ResponseEntity<Object> addCard (Authentication authentication, @RequestParam Card.CardType cardType, @RequestParam Card.CardColor cardColor) {
         Client client = clientRepository.findByEmail(authentication.getName());
         String cardHolder = client.getFirstName() + " " + client.getLastName();
         Set<Card> setCard = cardRepository.findByCardHolder(cardHolder);
-        Set<Card> listCardTypeDebit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.DEBIT)).collect(Collectors.toSet());
-        Set<Card> listCardTypeCredit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.CREDIT)).collect(Collectors.toSet());
-        if (((cardType == Card.CardType.DEBIT) && (listCardTypeDebit.size() == 3)) || ((cardType == Card.CardType.CREDIT) && (listCardTypeCredit.size() == 3)))
-        {
+        Set<Card> setCardTypeDebit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.DEBIT)).collect(Collectors.toSet());
+        Set<Card> setCardTypeCredit = setCard.stream().filter(card -> card.getCardType().equals(Card.CardType.CREDIT)).collect(Collectors.toSet());
+        if (((cardType == Card.CardType.DEBIT) && (setCardTypeDebit.size() == 3)) || ((cardType == Card.CardType.CREDIT) && (setCardTypeCredit.size() == 3))) {
             return new ResponseEntity<>("Up to 3 cards of the same type allowed", HttpStatus.FORBIDDEN);
         } else {
             Card card = new Card(cardHolder, cardType, cardColor, null, null, LocalDate.now(), LocalDate.now().plusYears(5));

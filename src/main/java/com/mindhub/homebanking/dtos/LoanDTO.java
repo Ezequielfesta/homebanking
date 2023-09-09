@@ -9,21 +9,21 @@ public class LoanDTO {
     private Double maxAmount;
     private Set<Integer> payments;
 
-    public Long getId() {
-        return id;
-    }
-    public Double getMaxAmount() {
-        return maxAmount;
-    }
-    public Set<Integer> getPayments() {
-        return payments;
-    }
-    public String getName() { return name; }
-
     public LoanDTO(Loan loan) {
         id = loan.getId();
         name = loan.getName();
         maxAmount = loan.getMaxAmount();
         payments = loan.getPayments();
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public String getName() { return name; }
+    public Double getMaxAmount() {
+        return maxAmount;
+    }
+    public Set<Integer> getPayments() {
+        return payments;
     }
 }

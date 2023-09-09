@@ -18,12 +18,10 @@ public class Account {
     private String number;
     private LocalDate creationDate;
     private Double balance = 0d;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     @JsonIgnore
     private Client client;
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     private Set<Transaction> transactions = new HashSet<>();
 
@@ -38,9 +36,6 @@ public class Account {
     public Long getId(){
         return id;
     }
-    public Client getClient() {
-        return client;
-    }
     public String getNumber() {
         return number;
     }
@@ -50,27 +45,28 @@ public class Account {
     public Double getBalance() {
         return balance;
     }
-    public Set<Transaction> getTransactions() {return transactions;}
-
-    public void setClient(Client client) {
-        this.client = client;
+    public Client getClient() {
+        return client;
     }
-
+    public Set<Transaction> getTransactions() {return transactions;}
     public String getRandomNumber() {
         Random random = new Random();
         return "VIN-" + String.format("%08d", (random.nextInt(100000000) + 1));
     }
+
     public void setNumber(String number) {
         if (!number.isBlank()) {
             this.number = number;
         }
     }
-
     public void setCreationDate() {
         creationDate = LocalDate.now();
     }
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+    public void setClient(Client client) {
+        this.client = client;
     }
     public void addTransaction(Transaction transaction){
         transaction.setAccount(this);

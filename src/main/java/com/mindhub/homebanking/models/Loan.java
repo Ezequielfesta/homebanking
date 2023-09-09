@@ -48,7 +48,6 @@ public class Loan {
     public void setPayments(Set<Integer> payments) {
             this.payments = payments;
     }
-
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setLoan(this);
         clientLoans.add(clientLoan);

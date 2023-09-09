@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
-
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
@@ -36,10 +35,9 @@ public class TransactionController {
         return listTransaction.stream().map( transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }
 
-    @RequestMapping(path= "/transactions",method = RequestMethod.POST)
+    @RequestMapping(path="/transactions",method=RequestMethod.POST)
     @Transactional
     public ResponseEntity<Object> transfer (Authentication authentication, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
-
         if (fromAccountNumber.isEmpty() || toAccountNumber.isEmpty() || amount==null || description.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }

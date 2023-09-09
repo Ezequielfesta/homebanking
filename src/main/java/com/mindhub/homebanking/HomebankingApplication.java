@@ -44,21 +44,21 @@ public class HomebankingApplication {
 			accountRepository.save(account3);
 
 			Transaction transaction1 = new Transaction();
-			transaction1.setTypeDebit();
+			transaction1.setType(Transaction.TransactionType.DEBIT);
 			transaction1.setDate();
 			transaction1.setAmount(-1500d);
 			transaction1.setDescription("Grocery");
 			transaction1.setAccount(account1);
 			transactionRepository.save(transaction1);
 			Transaction transaction2 = new Transaction();
-			transaction2.setTypeCredit();
+			transaction2.setType(Transaction.TransactionType.CREDIT);
 			transaction2.setDate();
 			transaction2.setAmount(1200d);
 			transaction2.setDescription("School");
 			transaction2.setAccount(account1);
 			transactionRepository.save(transaction2);
 			Transaction transaction3 = new Transaction();
-			transaction3.setTypeDebit();
+			transaction3.setType(Transaction.TransactionType.DEBIT);
 			transaction3.setDate();
 			transaction3.setAmount(-2000d);
 			transaction3.setDescription("TV Purchase");

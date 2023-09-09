@@ -31,7 +31,6 @@ public class Card {
     private LocalDate thruDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "client_id")
     @JsonIgnore
     private Client client;
 
@@ -59,7 +58,6 @@ public class Card {
     public CardColor getCardColor() {
         return cardColor;
     }
-
     public String getRandomNumber() {
         Random random = new Random();
         return  String.format("%04d", random.nextInt(10000)) + "-" +
@@ -67,11 +65,9 @@ public class Card {
                 String.format("%04d", random.nextInt(10000)) + "-" +
                 String.format("%04d", random.nextInt(10000));
     }
-
     public String getNumber() {
         return number;
     }
-
     public String getCvv() {
         return cvv;
     }
