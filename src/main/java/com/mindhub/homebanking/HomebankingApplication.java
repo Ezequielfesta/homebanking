@@ -46,7 +46,7 @@ public class HomebankingApplication {
 			Transaction transaction1 = new Transaction();
 			transaction1.setType(TransactionType.DEBIT);
 			transaction1.setDate();
-			transaction1.setAmount(-1500d);
+			transaction1.setAmount(1500d);
 			transaction1.setDescription("Grocery");
 			transaction1.setAccount(account1);
 			transactionRepository.save(transaction1);
@@ -60,7 +60,7 @@ public class HomebankingApplication {
 			Transaction transaction3 = new Transaction();
 			transaction3.setType(TransactionType.DEBIT);
 			transaction3.setDate();
-			transaction3.setAmount(-2000d);
+			transaction3.setAmount(2000d);
 			transaction3.setDescription("TV Purchase");
 			transaction3.setAccount(account2);
 			transactionRepository.save(transaction3);

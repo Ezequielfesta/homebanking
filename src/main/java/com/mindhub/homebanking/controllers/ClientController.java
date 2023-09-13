@@ -26,10 +26,22 @@ public class ClientController {
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
 
-    public ResponseEntity<Object> register(@RequestParam String firstName, @RequestParam String lastName,
+    public ResponseEntity<Object> register(Authentication authentication, @RequestParam String firstName, @RequestParam String lastName,
                                            @RequestParam String email, @RequestParam String password) {
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        if (authentication == null) {
+            return new ResponseEntity<>("You must be logged in", HttpStatus.FORBIDDEN);
+        }
+        if (firstName.isEmpty() || firstName.isBlank()) {
+            return new ResponseEntity<>("First Name cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if (lastName.isEmpty() || lastName.isBlank()) {
+            return new ResponseEntity<>("Last Name cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if (email.isEmpty() || email.isBlank()) {
+            return new ResponseEntity<>("Email cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if (password.isEmpty() || password.isBlank()) {
+            return new ResponseEntity<>("Password cannot be empty", HttpStatus.FORBIDDEN);
         }
         if (clientRepository.findByEmail(email) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
@@ -49,17 +61,23 @@ public class ClientController {
     }
 
     @RequestMapping("/clients")
-    public List<ClientDTO> getClients() {
-        List<Client> listClient = clientRepository.findAll();
-        List<ClientDTO> listClientDTO = listClient.stream().map( client -> new ClientDTO(client)).collect(Collectors.toList());
-        return listClientDTO;
+    public List<ClientDTO> getClients(Authentication authentication) {
+        if (authentication != null) {
+            List<Client> listClient = clientRepository.findAll();
+            List<ClientDTO> listClientDTO = listClient.stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
+            return listClientDTO;
+        } else return null;
     }
     @RequestMapping(path = "/clients/{id}", method = RequestMethod.POST)
-    public ClientDTO getClient(@PathVariable Long id){
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
+    public ClientDTO getClient(Authentication authentication, @PathVariable Long id) {
+        if (authentication != null) {
+            return new ClientDTO(clientRepository.findById(id).orElse(null));
+        } else return null;
     }
     @RequestMapping(path = "/clients/current")
     public ClientDTO getClient(Authentication authentication) {
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        if (authentication != null) {
+            return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        } else return null;
     }
 }

@@ -27,24 +27,31 @@ public class AccountController {
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts() {
-        List<Account> listAccount = accountRepository.findAll();
-        List<AccountDTO> listAccountDTO = listAccount.stream().map( account -> new AccountDTO(account)).collect(Collectors.toList());
-        return listAccountDTO;
+            List<Account> listAccount = accountRepository.findAll();
+            List<AccountDTO> listAccountDTO = listAccount.stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
+            return listAccountDTO;
     }
 
     @RequestMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id){
-        return new AccountDTO(accountRepository.findById(id).orElse(null));
+    public AccountDTO getAccount(Authentication authentication, @PathVariable Long id){
+        if (authentication != null) {
+            return new AccountDTO(accountRepository.findById(id).orElse(null));
+        } else return null;
     }
 
    @RequestMapping("/clients/current/accounts")
    public Set<Account> getAccounts(Authentication authentication) {
-       Client client = clientRepository.findByEmail(authentication.getName());
-       return accountRepository.findByClient(client);
+       if (authentication != null) {
+           Client client = clientRepository.findByEmail(authentication.getName());
+           return accountRepository.findByClient(client);
+       } else return null;
     }
 
    @RequestMapping(path="/clients/current/accounts",method= RequestMethod.POST)
     public ResponseEntity<Object> addAccount (Authentication authentication) {
+       if (authentication == null) {
+           return new ResponseEntity<>("You must be logged in", HttpStatus.FORBIDDEN);
+       }
        Client client = clientRepository.findByEmail(authentication.getName());
        Set<Account> setAccount = accountRepository.findByClient(client);
        if (setAccount.size() == 3) {

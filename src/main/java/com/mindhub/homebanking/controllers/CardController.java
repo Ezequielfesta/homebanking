@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.lang.Object;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +28,15 @@ public class CardController {
 
     @RequestMapping("/clients/current/cards")
     public ResponseEntity<Object> addCard (Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
+        if (authentication == null) {
+            return new ResponseEntity<>("You must be logged in", HttpStatus.FORBIDDEN);
+        }
+        if (cardType == null || cardType.toString().isBlank()) {
+            return new ResponseEntity<>("Card type cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if (cardColor == null || cardColor.toString().isBlank()) {
+            return new ResponseEntity<>("Card color cannot be empty", HttpStatus.FORBIDDEN);
+        }
         Client client = clientRepository.findByEmail(authentication.getName());
         String cardHolder = client.getFirstName() + " " + client.getLastName();
         Set<Card> setCard = cardRepository.findByCardHolder(cardHolder);

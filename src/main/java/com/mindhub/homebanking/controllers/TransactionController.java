@@ -39,6 +39,9 @@ public class TransactionController {
     @RequestMapping(path="/transactions",method=RequestMethod.POST)
     @Transactional
     public ResponseEntity<Object> transfer (Authentication authentication, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
+        if (authentication == null) {
+            return new ResponseEntity<>("You must be logged in", HttpStatus.FORBIDDEN);
+        }
         if (fromAccountNumber.isEmpty() || toAccountNumber.isEmpty() || amount==null || description.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
