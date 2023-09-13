@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class CardController {
     @Autowired
     private CardRepository cardRepository;
 
-    @RequestMapping("/clients/current/cards")
+    @GetMapping("/clients/current/cards")
     public ResponseEntity<Object> addCard (Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
         if (authentication == null) {
             return new ResponseEntity<>("You must be logged in", HttpStatus.FORBIDDEN);

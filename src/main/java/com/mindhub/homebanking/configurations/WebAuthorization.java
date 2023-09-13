@@ -19,8 +19,8 @@ public class WebAuthorization {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients","/api/login").permitAll();
         http.authorizeRequests().antMatchers("/","/web/index.html","/index.html","/web/js/index.js","/web/css/style.css","/web/img/Mindhub-logo.png","/web/img/mindhub.jpg","/web/img/favicon.ico").permitAll();
-        http.authorizeRequests().antMatchers("/**").hasAuthority("CLIENT");
-        //http.authorizeRequests().antMatchers("/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/web/**","/api/**").hasAuthority("CLIENT");
+        http.authorizeRequests().antMatchers("/**").hasAuthority("ADMIN");
 
         http.formLogin()
                 .usernameParameter("email")

@@ -12,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,13 +28,13 @@ public class TransactionController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/transactions")
+    @GetMapping("/transactions")
     public List<TransactionDTO> getTransaction() {
         List<Transaction> listTransaction = transactionRepository.findAll();
         return listTransaction.stream().map( transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }
 
-    @RequestMapping(path="/transactions",method=RequestMethod.POST)
+    @PostMapping("/transactions")
     @Transactional
     public ResponseEntity<Object> transfer (Authentication authentication, @RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam Double amount, @RequestParam String description)  {
         if (authentication == null) {
