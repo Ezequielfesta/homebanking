@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.WebAttributes;
+
+import javax.annotation.security.DenyAll;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,9 +20,10 @@ public class WebAuthorization {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/clients","/api/login").permitAll();
-        http.authorizeRequests().antMatchers("/","/web/index.html","/index.html","/web/js/index.js","/web/css/style.css","/web/img/Mindhub-logo.png","/web/img/mindhub.jpg","/web/img/favicon.ico").permitAll();
+        http.authorizeRequests().antMatchers("/web/index.html","/web/js/index.js","/web/css/style.css","/web/img/Mindhub-logo.png","/web/img/mindhub.jpg","/web/img/favicon.ico").permitAll();
+        http.authorizeRequests().antMatchers("/web/admin/**","/api/admin/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers("/web/**","/api/**").hasAuthority("CLIENT");
-        http.authorizeRequests().antMatchers("/**").hasAuthority("ADMIN");
+        http.authorizeRequests().anyRequest().denyAll();
 
         http.formLogin()
                 .usernameParameter("email")
