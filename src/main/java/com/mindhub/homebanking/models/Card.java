@@ -1,7 +1,10 @@
 package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.hibernate.annotations.GenericGenerator;
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Random;
@@ -49,12 +52,9 @@ public class Card {
         return cardColor;
     }
     public String getRandomNumber() {
-        Random random = new Random();
-        return  String.format("%04d", random.nextInt(10000)) + "-" +
-                String.format("%04d", random.nextInt(10000)) + "-" +
-                String.format("%04d", random.nextInt(10000)) + "-" +
-                String.format("%04d", random.nextInt(10000));
+        return CardUtils.getCardNumber();
     }
+
     public String getNumber() {
         return number;
     }
@@ -86,9 +86,9 @@ public class Card {
         }
     }
     public void setCvv() {
-        Random random = new Random();
-        cvv = String.format("%03d",random.nextInt(1000));
+        cvv = CardUtils.getCardCvv();
     }
+
     public void setFromDate(LocalDate fromDate) {
         this.fromDate = fromDate;
     }
