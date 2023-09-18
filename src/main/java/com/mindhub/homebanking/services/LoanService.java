@@ -9,11 +9,8 @@ import java.util.List;
 
 public interface LoanService {
 
-    List<LoanDTO> getLoans(Authentication authentication);
-    ResponseEntity<Object> addClientLoan (Authentication authentication, LoanApplicationDTO loanApplicationDTO);
+    List<LoanDTO> getLoans();
 
-    ResponseEntity<Object> checkLoan (Authentication authentication, LoanApplicationDTO loanApplicationDTO);
-
-    void createClientLoan (Authentication authentication, LoanApplicationDTO loanApplicationDTO);
+    void addClientLoan (Authentication authentication, LoanApplicationDTO loanApplicationDTO);
 }
 

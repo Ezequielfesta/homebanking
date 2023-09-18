@@ -2,14 +2,10 @@ package com.mindhub.homebanking.services.implement;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.AccountService;
-import com.mindhub.homebanking.services.GeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -25,24 +21,18 @@ public class AccountServiceImplement implements AccountService {
     @Autowired
     ClientRepository clientRepository;
 
-    @Autowired
-    GeneralService generalService;
-
     @Override
     public List<AccountDTO> getAccountsDTO(Authentication authentication) {
-        generalService.checkLoggedIn(authentication);
         return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
     }
 
     @Override
     public AccountDTO getAccountDTO(Authentication authentication, Long id) {
-        generalService.checkLoggedIn(authentication);
         return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
 
     @Override
     public Set<Account> getCurrentAccounts(Authentication authentication) {
-        generalService.checkLoggedIn(authentication);
         return accountRepository.findByClient(clientRepository.findByEmail(authentication.getName()));
     }
     @Override
@@ -58,18 +48,10 @@ public class AccountServiceImplement implements AccountService {
     }
 
     @Override
-    public ResponseEntity<Object> addAccount (Authentication authentication) {
-        generalService.checkLoggedIn(authentication);
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Set<Account> setAccount = accountRepository.findByClient(client);
-        if (setAccount.size() == 3) {
-            return new ResponseEntity<>("Up to 3 accounts per client allowed", HttpStatus.FORBIDDEN);
-        } else {
+    public void addAccount (Authentication authentication) {
             Account account = createAccount();
-            client.addAccount(account);
+            clientRepository.findByEmail(authentication.getName()).addAccount(account);
             saveAccount(account);
-            return new ResponseEntity<>("Account created", HttpStatus.CREATED);
-        }
     }
 
     @Override

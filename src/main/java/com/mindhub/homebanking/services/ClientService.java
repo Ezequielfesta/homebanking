@@ -12,16 +12,12 @@ public interface ClientService {
 
     ClientDTO getClientDTO(Authentication authentication);
 
-    ClientDTO getClientDTOById(Authentication authentication, Long id);
+    ClientDTO getClientDTOById(Long id);
 
-    ResponseEntity<Object> register(String firstName,
-                                    String lastName,
-                                    String email,
-                                    String password);
-
-    ResponseEntity<Object> checkEmailExists(String email);
-
-    ResponseEntity<Object> checkParameters(String firstName, String lastName, String email, String password);
+    void register(String firstName,
+                  String lastName,
+                  String email,
+                  String password);
 
     void saveClient(Client client);
 
